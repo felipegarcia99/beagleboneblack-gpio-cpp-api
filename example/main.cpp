@@ -1,17 +1,13 @@
 #include <iostream>
 #include "../BBB_GPIO/digital.hpp"
 #include "../BBB_GPIO/utils.hpp"
-#include <signal.h> //  our new library 
 #include <thread>
 
 using namespace std;
 
-void defining_sigaction();
-void my_handler(int signal);
 void main_loop(int led1, int led2);
 void sigint_handler(int led1, int led2);
 
-volatile sig_atomic_t flag = 0;
 
 int main(){
     int led1 = 50;
@@ -48,25 +44,9 @@ void sigint_handler(int led1, int led2){
     {
         if (flag){ // my action when signal set it 1
             printf("\n Signal caught!\n");
-            //printf("\n default action it not termination!\n");
-            //flag = 0;
             unexport_gpio(led1);
             unexport_gpio(led2);
             exit(1);
        }
     }
-    
-
-}
-
-void my_handler(int signal){ // can be called asynchronously
-    flag = 1; // set flag
-}
-
-void defining_sigaction(){
-    struct sigaction sigIntHandler;
-    sigIntHandler.sa_handler = my_handler;
-    sigemptyset(&sigIntHandler.sa_mask);
-    sigIntHandler.sa_flags = 0;
-    sigaction(SIGINT, &sigIntHandler, NULL);
 }
