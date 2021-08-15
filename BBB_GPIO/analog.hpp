@@ -1,0 +1,1 @@
+int analogRead(int number);
