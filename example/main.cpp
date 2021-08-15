@@ -8,16 +8,17 @@ using namespace std;
 
 void defining_sigaction();
 void my_handler(int signal);
-void main_loop();
-void sigint_handler();
+void main_loop(int led1, int led2);
+void sigint_handler(int led1, int led2);
 
 volatile sig_atomic_t flag = 0;
-int led1 = 50;
-int led2 = 51;
 
 int main(){
-    thread t1(main_loop);
-    thread t2(sigint_handler);
+    int led1 = 50;
+    int led2 = 51;
+
+    thread t1(main_loop, led1, led2);
+    thread t2(sigint_handler, led1, led2);
 
     t1.join();
     t2.join();
@@ -25,7 +26,7 @@ int main(){
     return 0;
 }
 
-void main_loop(){
+void main_loop(int led1, int led2){
     pinMode(led1, true);
     pinMode(led2, true);
 
@@ -40,7 +41,7 @@ void main_loop(){
     }
 }
 
-void sigint_handler(){
+void sigint_handler(int led1, int led2){
    defining_sigaction();
 
     while (1)
