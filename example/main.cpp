@@ -23,8 +23,8 @@ int main(){
 }
 
 void main_loop(int led1, int led2){
-    pinMode(led1, true);
-    pinMode(led2, true);
+    pinMode(led1, OUTPUT);
+    pinMode(led2, OUTPUT);
 
     while (1)
     {
