@@ -6,7 +6,7 @@
 
 using namespace std;
 
-void pinMode(int pin, bool mode){
+void pinMode(int pin, string mode){
     export_gpio(pin);
     direction_definer(pin, mode);
 }
@@ -16,14 +16,14 @@ void export_gpio(int pin){
 	string pin_str = to_string(pin);
 
 	cout << "Exporting GPIO" + pin_str << endl;
-    //TESTE
+    //TEST: DON'T WORK
     //fs.open("/sys/class/gpio/export");
     //fs << "50";
 
 	system(("cd /sys/class/gpio && echo " + pin_str + " > export").c_str());
 }
 
-void direction_definer(int pin, bool mode){
+void direction_definer(int pin, string mode){
     fstream fs;
 	string pin_str = to_string(pin);
 
@@ -34,7 +34,7 @@ void direction_definer(int pin, bool mode){
         cerr << "Failure in setting direction. Error: " << strerror(errno) << '\n';
     } else {
         cerr << "Success in setting the direction\n";
-        if (mode == true){fs << "out";} else {fs << "in";}
+        fs << mode;
 		fs.close();
     }
 }
@@ -48,7 +48,6 @@ void digitalWrite(int pin, int state){
 }
 
 void unexport_gpio(int pin){
-    //fstream fs;
 	string pin_str = to_string(pin);
 
 	cout << "Unexporting GPIO" + pin_str << endl;
